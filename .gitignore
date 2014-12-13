@@ -1,3 +1,4 @@
 global
+src/bot/config.js
 node_modules
 .DS_Store

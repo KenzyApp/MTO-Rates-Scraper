@@ -9,16 +9,19 @@ module.exports = function(grunt) {
         command: 'rm -rf global'
       },
       wu: {
-        command: 'casperjs --config=casper.json src/wu.js'
+        command: 'casperjs --config=casper.json src/scrape/wu.js'
       },
       mg: {
-        command: 'casperjs --config=casper.json src/mg.js'
+        command: 'casperjs --config=casper.json src/scrape/mg.js'
       },
       bog: {
-        command: 'casperjs --config=casper.json src/bog.js'
+        command: 'casperjs --config=casper.json src/scrape/bog.js'
       },
       analytics: {
-        command: 'node src/analytics.js'
+        command: 'node src/analytics/run.js'
+      },
+      tweet: {
+        command: 'node src/bot/run.js'
       }
     },
 
@@ -37,5 +40,7 @@ module.exports = function(grunt) {
     'concurrent:dist',
     'shell:analytics'
   ]);
+
+  grunt.registerTask('tweet', ['shell:tweet']);
 
 };
