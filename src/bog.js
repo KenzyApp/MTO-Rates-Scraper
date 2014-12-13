@@ -8,23 +8,34 @@ casper.on('remote.message', function (msg) {
   console.log(msg);
 });
 
-var bog = function () {
-  casper.start(url);
+var data = {};
 
-  casper.thenEvaluate(function () {
+var fs = require('fs');
+
+casper.start(url);
+
+casper.then(function () {
+  data = casper.evaluate(function () {
     var buyGbp = parseFloat(document.querySelector('body > table > tbody > tr:nth-child(3) > td:nth-child(3)').innerHTML);
     var sellGbp = parseFloat(document.querySelector('body > table > tbody > tr:nth-child(3) > td:nth-child(4)').innerHTML);
 
     var buyEur = parseFloat(document.querySelector('body > table > tbody > tr:nth-child(13) > td:nth-child(3)').innerHTML);
     var sellEur = parseFloat(document.querySelector('body > table > tbody > tr:nth-child(13) > td:nth-child(4)').innerHTML);
 
-    console.log('GBP');
-    console.log((buyGbp + sellGbp)/2);
-    console.log('EUR');
-    console.log((buyEur + sellEur)/2);
+    return {
+      gbp: (buyGbp + sellGbp)/2,
+      eur: (buyEur + sellEur)/2
+    };
   });
+});
 
-  casper.run();
-};
+casper.then(function () {
+  console.log('GBP', data.gbp);
+  console.log('EUR', data.eur);
 
-bog(3);
+  fs.write('global/BOG_GBP', data.gbp, 'w');
+  fs.write('global/BOG_EUR', data.eur, 'w');
+});
+
+
+casper.run();

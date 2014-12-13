@@ -18,34 +18,41 @@ var selectCountry = function () {
   $input.val('100');
 };
 
+var extractedRate;
 var extractRate = function () {
   var rate = this.getElementInfo('#exchangeLabel').text.match(/\d+,\d+/)[0];
-  console.log(rate.replace(',', '.'));
+  extractedRate = rate.replace(',', '.');
 };
+
+var fs = require('fs');
 
 // Main
 var casper = require('casper').create({
   loadImages:  false,
   loadPlugins: false
 });
-casper.on('log', function () {});
+casper.on('page.error', function () {
+  console.log('');
+});
 
 // UK to GH
 casper.start(GBP.url);
 casper.thenEvaluate(selectCountry);
 casper.thenClick(GBP.button);
-casper.then(function () {
-  console.log('GBP (UK)');
-});
 casper.then(extractRate);
+casper.then(function () {
+  console.log('GBP (UK)', extractedRate);
+  fs.write('global/WU_GBP', extractedRate, 'w');
+});
 
 // DE to GH
 casper.thenOpen(EUR.url);
 casper.thenEvaluate(selectCountry);
 casper.thenClick(EUR.button);
-casper.then(function () {
-  console.log('EUR (DE)');
-});
 casper.then(extractRate);
+casper.then(function () {
+  console.log('EUR (DE)', extractedRate);
+  fs.write('global/WU_EUR', extractedRate, 'w');
+});
 
 casper.run();

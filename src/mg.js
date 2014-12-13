@@ -6,17 +6,14 @@ var EUR = {
   url: 'https://www.moneygram.com/MGODE/flows/home'
 };
 
+var extractedRate;
+
+var fs = require('fs');
 
 // Main
 var casper = require('casper').create({
   loadImages:  false,
   loadPlugins: false
-});
-
-casper.on('remote.message', function (msg) {
-  if (msg.indexOf('1 =') > -1) {
-    console.log(msg);
-  }
 });
 
 // UK to GH
@@ -34,14 +31,16 @@ casper.waitForText("GHS", function() {
   });
 });
 casper.thenClick('.webtrendsGB_bFirst');
-casper.then(function () {
-  console.log('GBP (UK)');
-});
 casper.waitForSelectorTextChange('span.exchangeRate', function () {
-  casper.evaluate(function () {
-    console.log($('span.exchangeRate').text());
+  extractedRate = casper.evaluate(function () {
+     return $('span.exchangeRate').text();
   });
 });
+casper.then(function () {
+  console.log('GBP (UK)', extractedRate);
+  fs.write('global/MG_GBP', extractedRate, 'w');
+});
+
 
 // DE to GH
 casper.thenOpen(EUR.url);
@@ -58,14 +57,15 @@ casper.waitForText("GHS", function() {
   });
 });
 casper.thenClick('#j_idt149');
-casper.then(function () {
-  console.log('EUR (DE)');
-});
 casper.waitForText("1 EUR", function() {
-  casper.evaluate(function () {
+  extractedRate = casper.evaluate(function () {
     var rate = $('p.exRate').text().match(/\d+,\d+/)[0];
-    console.log(rate.replace(',', '.'));
+    return rate.replace(',', '.');
   });
+});
+casper.then(function () {
+  console.log('EUR (DE)', extractedRate);
+  fs.write('global/MG_EUR', extractedRate, 'w');
 });
 
 

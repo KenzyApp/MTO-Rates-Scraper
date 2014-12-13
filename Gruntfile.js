@@ -5,6 +5,9 @@ module.exports = function(grunt) {
   grunt.initConfig({
 
     shell: {
+      clear: {
+        command: 'rm -rf global'
+      },
       wu: {
         command: 'casperjs --config=casper.json src/wu.js'
       },
@@ -13,6 +16,9 @@ module.exports = function(grunt) {
       },
       bog: {
         command: 'casperjs --config=casper.json src/bog.js'
+      },
+      analytics: {
+        command: 'node src/analytics.js'
       }
     },
 
@@ -26,6 +32,10 @@ module.exports = function(grunt) {
 
   });
 
-  grunt.registerTask('default', ['concurrent:dist']);
+  grunt.registerTask('default', [
+    'shell:clear',
+    'concurrent:dist',
+    'shell:analytics'
+  ]);
 
 };
