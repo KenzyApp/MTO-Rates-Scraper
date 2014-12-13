@@ -19,5 +19,5 @@ console.log('WU:', getMarkup(BOG_GBP, WU_GBP), '%');
 console.log('MG:', getMarkup(BOG_GBP, MG_GBP), '%');
 
 console.log('\nEUR (DE)');
-console.log('WU:', getMarkup(BOG_EUR, MG_EUR), '%');
+console.log('WU:', getMarkup(BOG_EUR, WU_EUR), '%');
 console.log('MG:', getMarkup(BOG_EUR, MG_EUR), '%');
