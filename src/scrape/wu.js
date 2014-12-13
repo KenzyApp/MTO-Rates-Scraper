@@ -31,9 +31,6 @@ var casper = require('casper').create({
   loadImages:  false,
   loadPlugins: false
 });
-casper.on('page.error', function () {
-  console.log('');
-});
 
 // UK to GH
 casper.start(GBP.url);

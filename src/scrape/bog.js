@@ -4,9 +4,6 @@ var casper = require('casper').create({
   loadImages:  false,
   loadPlugins: false
 });
-casper.on('remote.message', function (msg) {
-  console.log(msg);
-});
 
 var data = {};
 
