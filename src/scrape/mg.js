@@ -56,7 +56,7 @@ casper.waitForText("GHS", function() {
     $input.val('100');
   });
 });
-casper.thenClick('#j_idt149');
+casper.thenClick('#j_idt158');
 casper.waitForText("1 EUR", function() {
   extractedRate = casper.evaluate(function () {
     var rate = $('p.exRate').text().match(/\d+,\d+/)[0];
